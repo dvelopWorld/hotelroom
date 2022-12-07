@@ -60,7 +60,7 @@ app.use(function(err, req, res, next) {
 });
 
 const Sequelize = require('sequelize');
-app.locals.sequelize = new Sequelize('hotelroom', 'root', '123456', {
+app.locals.sequelize = new Sequelize('hotelroom', 'root', 'password', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
