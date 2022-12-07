@@ -1,0 +1,43 @@
+<div class="nav-header">
+  <a href="/admin">
+    <img src="/images/theIcon.JPG" width="223" height="80" />
+  </a>
+</div>
+<!--**********************************
+            Nav header end
+        ***********************************-->
+
+
+
+
+
+<!--**********************************
+            Header start
+        ***********************************-->
+<div class="header">
+    <nav class="navbar">
+        <div style="float:right;">
+	        <ul style="list-style:none;">
+	            <li>
+              		<!--<a href="#">Profile</a>-->
+              		<a onclick="doLogout()" style="cursor: pointer">Logout</a>
+	          	</li>
+	        </ul>
+      	</div>
+    </nav>
+</div>
+
+
+<script type="text/javascript">
+  function doLogout(){
+    console.log('in logout function');
+    doAjaxCall('/admin/logout', null, false, 'PUT', (response, responseCode) => {
+        if(responseCode == 1){
+            commonToastr(response.message, response.status);
+            if(response.status){
+                setTimeout(()=>{window.location.href = "/admin/login"}, 1200);
+            }
+        }
+    });
+  }
+</script>

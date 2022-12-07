@@ -1,0 +1,49 @@
+<div class='bodyContent'>
+	<div class="formDiv">
+		<h2><%=title.split('-')[0]%></h2>
+
+		<form id="addRoomTypeForm">
+            <div>
+                <label for="typeName"><strong>Room Type Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></label>
+                <input type="text" value="<%=roomTypeData.type_name%>" placeholder="Enter Room Type" id="typeName" name="typeName" required>
+            </div>
+
+            <input type="hidden" id="roomTypeId" name="id" value="<%=roomTypeData.id%>" >
+
+            <div>
+                <button class="submitBtn" type="submit">Submit</button>
+            </div>
+        </form>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("addRoomTypeForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            addRoomType(e.target);
+        });
+    });
+
+    function addRoomType(form){
+        const formData = Object.fromEntries(new FormData(form));
+        doAjaxCall('/admin/add-room-type', formData, false, 'POST', (response, responseCode) => {
+            if(responseCode == 1){
+                commonToastr(response.message, response.status);
+                if(response.status){
+                    let roomTypeId = document.getElementById('roomTypeId').value;
+
+                    if(roomTypeId){
+                        console.log('in if of roomTypeId');
+                        setTimeout(() => location.reload(), 1200)
+                    }else{
+                        console.log('in elese of roomTypeId');
+                        form.reset();               // clear the form after successfull response
+                    }
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,63 @@
+<div class='bodyContent'>
+	<div class="formDiv">
+		<h2><%=title.split('-')[0]%></h2>
+
+		<form id="addModeratorForm">
+            <div>
+                <label for="firstName"><strong>First Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></label>
+                <input type="text" value="<%=userData.first_name%>" placeholder="Enter First Name" id="firstName" name="firstName" required>
+            </div>
+
+            <div>
+                <label for="lastName"><strong>Last Name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></label>
+                <input type="text" value="<%=userData.last_name%>" placeholder="Enter Last Name" id="lastName" name="lastName">
+            </div>
+
+            <div>
+                <label for="userEmail"><strong>Email Address </strong></label>
+                <input type="email" value="<%=userData.email%>" placeholder="Enter Email Address" id="userEmail" name="userEmail" required>
+            </div>
+
+            <div>
+                <label for="userPassword"><strong>Password &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></label>
+                <input type="password" value="" placeholder="Enter Password" id="userPassword" name="userPassword" <%if(userData){%>disabled<%}%> required>
+            </div>
+
+            <input type="hidden" name="id" id="userId" value="<%=userData.id%>">
+
+            <div>
+                <button class="submitBtn" type="submit">Submit</button>
+            </div>
+        </form>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("addModeratorForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            addModerator(e.target);
+        });
+    });
+
+    function addModerator(form){
+        const formData = Object.fromEntries(new FormData(form));
+        doAjaxCall('/admin/add-moderator', formData, false, 'POST', (response, responseCode) => {
+            if(responseCode == 1){
+                commonToastr(response.message, response.status);
+                if(response.status){
+                    let userId = document.getElementById('userId').value;
+                    if(userId){
+                        console.log('in if of userId');
+                        setTimeout(() => location.reload(), 1200)
+                    }else{
+                        console.log('in elese of userId');
+                        form.reset();               // clear the form after successfull response
+                    }
+                }
+            }
+        });
+    }
+</script>

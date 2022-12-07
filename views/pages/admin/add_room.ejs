@@ -1,0 +1,92 @@
+<div class='bodyContent'>
+	<div class="formDiv">
+		<h2><%=title.split('-')[0]%></h2>
+
+		<form id="addRoomForm">
+            <div class="formElements">
+                <div>
+                    <label for="roomType"><strong>Room Type &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></label>
+                    <select name="roomType" id="roomType" style="padding: 10px; border:none;" required>
+                        <option value="">Select Room Type</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="roomPrice"><strong>Price &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></label>
+                    <input type="number" value="<%=roomData.price%>" placeholder="Enter Room Price" id="roomPrice" name="roomPrice" required>
+                </div>
+
+                <div>
+                    <label for="roomQuantity"><strong>Quantity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></label>
+                    <input type="number" value="<%=roomData.quantity%>" placeholder="Enter Room Quantity" id="roomQuantity" name="roomQuantity" required>
+                </div>
+
+                <div>
+                    <label for="roomDescription"><strong>Description &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></label>
+                    <textarea id="roomDescription" name="roomDescription" placeholder="Enter Room Description" rows="4" cols="40"><%=roomData.description%></textarea>
+                </div>
+
+                <input type="hidden" name="id" id="roomId" value="<%=roomData.id%>" >
+                <input type="hidden" name="typeId" id="typeId" value="<%=roomData.type_id%>" >
+
+                <div>
+                    <button class="submitBtn" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("addRoomForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            addRoom(e.target);
+        });
+
+        doAjaxCall('/admin/room-type-list', {isActive: 1}, false, 'PUT', (response, responseCode) => {
+            // getting all the active room types from database and appending in the select list
+            if(responseCode == 1){
+                if(response.status){
+                    const select = document.getElementById('roomType');
+                    let typeId = document.getElementById('typeId').value;
+                    for(let record of response.data){
+                        const option = document.createElement('option');
+                        option.text = record.type_name;
+                        option.value = record.id;
+                        if(typeId && record.id == typeId){
+                            option.setAttribute('selected', 'selected');
+                        }
+                        select.appendChild(option);
+                    }
+                }else{
+                    commonToastr(response.message, response.status);
+                }
+            }
+        });
+    });
+
+    function addRoom(form){
+        const formData = Object.fromEntries(new FormData(form));
+        console.log('the form data is: ', formData);
+
+        doAjaxCall('/admin/add-room', formData, false, 'POST', (response, responseCode) => {
+            if(responseCode == 1){
+                commonToastr(response.message, response.status);
+                if(response.status){
+                    let roomId = document.getElementById('roomId').value;
+
+                    if(roomId){
+                        console.log('in if of roomId');
+                        setTimeout(() => location.reload(), 1200)
+                    }else{
+                        console.log('in elese of roomId');
+                        form.reset();               // clear the form after successfull response
+                    }
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,61 @@
+<style type="text/css">
+    input {
+        height: 1.5rem;
+        margin: .5rem;
+    }
+</style>
+
+<div class="body-div">
+    <div class="formDiv">
+        <div>
+            <img src="/images/hotel.JPG" style="width:20rem;" alt="">
+        </div>
+
+        <h4 style="text-align:center;">Sign in your account</h4>
+
+        <form id="loginForm">
+            <div>
+                <label for="loginEmail"><strong>Email &nbsp &nbsp&nbsp&nbsp</strong></label>
+                <input type="email" value="" placeholder="Enter Email" id="loginEmail" name="loginEmail" required>
+            </div>
+
+            <div>
+                <label for="loginPassword"><strong>Password</strong></label>
+                <input type="password" value="" placeholder="Enter Password" id="loginPassword" name="loginPassword" required>
+            </div>
+
+            <div>
+                <button class="submitBtn" type="submit">Sign Me In</button>
+            </div>
+        </form>
+    </div>    
+</div>
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            doLogin(e.target);
+        });
+    });
+
+    function doLogin(form){
+        const formData = Object.fromEntries(new FormData(form));
+        doAjaxCall('/login', formData, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                    swal("SUCCESS!", response.message, "success");
+                    document.cookie = `userToken=${response.token}; SameSite=Lax; Secure`;
+                    document.cookie = `firstName=${response.user_data.first_name}; SameSite=Lax; Secure`;
+                    document.cookie = `lastName=${response.user_data.last_name}; SameSite=Lax; Secure`;
+                    setTimeout(()=>{window.location.href = "/"}, 1000);
+                }else{
+                    swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+    }
+</script>

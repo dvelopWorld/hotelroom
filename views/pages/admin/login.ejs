@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title><%=title%></title>
+        <link rel="icon" type="image/JPG" sizes="16x16" href="/images/theIcon.JPG">
+        <link href="/vendor/toastr/css/toastr.min.css" rel="stylesheet">
+        <link href="/stylesheet/style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="formDiv">
+            <div>
+                <img src="/images/theIcon.JPG" style="width:20rem;" alt="">
+            </div>
+
+            <h4 style="text-align:center;">Sign in your account</h4>
+
+            <form id="loginForm">
+                <div>
+                    <label for="loginEmail"><strong>Email &nbsp &nbsp&nbsp&nbsp</strong></label>
+                    <input type="email" value="" placeholder="Enter Email" id="loginEmail" name="loginEmail" required>
+                </div>
+
+                <div>
+                    <label for="loginPassword"><strong>Password</strong></label>
+                    <input type="password" value="" placeholder="Enter Password" id="loginPassword" name="loginPassword" required>
+                </div>
+
+                <div>
+                    <button class="submitBtn" type="submit">Sign Me In</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+<!--**********************************
+    Scripts
+***********************************-->
+
+<script src="/vendor/global/global.min.js"></script>
+<script src="/vendor/toastr/js/toastr.min.js"></script>
+<script src="/javascripts/common.js"></script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            doLogin(e.target);
+        });
+    });
+
+    function doLogin(form){
+        const formData = Object.fromEntries(new FormData(form));
+        doAjaxCall('/admin/login', formData, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                commonToastr(response.message, response.status);
+                if(response.status){
+                    document.cookie = `userType=${response.admin_data.user_type}; SameSite=Lax; Secure`;
+                    setTimeout(()=>{window.location.href = "/admin"}, 1000);
+                }
+            }
+        });
+    }
+</script>

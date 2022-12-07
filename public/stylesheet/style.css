@@ -1,0 +1,174 @@
+.nav-header {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.header {
+  padding-left: 17.5rem;
+  background: #999;
+}
+
+.header .navbar {
+  height: 4.5rem;
+}
+
+.navbar ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 2.5rem;
+}
+
+.side-nav {
+  width: 13.5rem;
+  position: absolute;
+  top: 5rem;
+  z-index: 4;
+  background-color:  #999;
+  height: 82vh;
+  color: #fff;
+}
+
+.bodyContent {
+  position: relative;
+  top: 2rem;
+  left: 17rem;
+  width: 70%;
+}
+
+.bodyContent input {
+  height: 1.5rem;
+  margin: .5rem;
+}
+
+.footer {
+  padding-left: 10rem;
+  background-color: #bbb;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+}
+
+.footer .copyright {
+  padding: 0.9375rem;
+}
+
+.footer .copyright p {
+  text-align: center;
+  margin: 0;
+}
+
+.formDiv {
+  width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.formDiv input {
+  height: 1.5rem;
+  margin: .5rem;
+}
+
+.side-nav ul {
+  list-style: none;
+}
+
+.side-nav ul li {
+  padding: .5rem 0;
+}
+
+.side-nav ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.side-nav ul li a:hover {
+  color: #000;
+}
+
+.dropdown > ul {
+  display: none;
+}
+
+.dropdown-content {
+  padding-left: 15px;
+  width: 150px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  position: relative;
+  background: #888;
+}
+
+.submitBtn {
+  width: 65%;
+  height: 2rem;
+  background-color: #1584e6;
+  border: 1px solid #1584e6;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.theTable {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+}
+
+.theTable thead tr {
+  background-color: #8e9995;
+  color: #ffffff;
+  text-align: left;
+}
+
+.theTable th, .theTable td {
+  padding: 12px 15px;
+}
+
+.theTable tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.theTable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.theTable tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.theTable tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+.formElements{
+  text-align: left;
+}
+
+.actionButtons a {
+  padding: 0 5px;
+}
+
+.imagePicsUpload {
+  margin: 10px 20px;
+  padding: 10px 20px;
+  display: inline-block;
+}
+
+.imagePicsUpload img{
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 4px #000000;
+}

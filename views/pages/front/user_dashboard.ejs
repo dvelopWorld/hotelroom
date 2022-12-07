@@ -1,0 +1,94 @@
+<div class="dashWrapper">
+    <div class="dashSidebar">
+        <%- include('../../partials/front/sidebar.ejs'); %>
+    </div>
+
+    <div class="body-div dashBody">
+        <div class="roomData" id="roomData">
+            
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        getDefaultData();           // this function is in sidebar file in partials/front folder
+    });
+
+
+    function setDashboard(dashboardData){
+        let imageStr = '';
+
+        if(document.cookie){
+            dashboardData.userLogIn = true;
+        }
+
+        for(let record of dashboardData){
+            imageStr += `<div id="bookRoom${record.id}" class="roomDiv">
+                <div class="room-box">
+                    <img src="${record.file_path?.slice(6)}" alt="Room image" width="250" height="250">
+                </div>
+                <div class="room-data">
+                    <b>Room Type: </b> ${record.room_type}<br/>
+                    <b>Quantity: </b> ${record.quantity}<br/>
+                    <b>Price: </b> ${record.price}<br/>
+                    <b>Description: </b> ${record.description}<br/>
+                </div>
+                <div class="bookRoomClass">
+                    <form id="bookRoomForm${record.id}" onsubmit="bookRoom(event, ${record.id}, ${record.quantity})">
+                        <div>
+                            <label for="fromDate${record.id}">From Time</label>
+                            <input type="datetime-local" name="fromDate" id="fromDate${record.id}" required>
+                        </div>
+                        <div>
+                            <label for="tillDate${record.id}">Till Time</label>
+                            <input type="datetime-local" name="tillDate" id="tillDate${record.id}" required>
+                        </div>
+                        <div>
+                            <label for="bookQuantity${record.id}">Quantity</label>
+                            <input type="number" name="bookQuantity" id="bookQuantity${record.id}" required>
+                        </div>
+                        <div id="dataDiv${record.id}">
+                        </div>
+                        <button class="submitBtn bookBtn" type="submit">Book</button>
+                    </form>
+                </div>
+            </div>`;
+        }
+
+        document.getElementById("roomData").innerHTML = imageStr;
+
+        for(let record of dashboardData){
+            document.getElementById(`fromDate${record.id}`).min = new Date().toISOString().slice(0,new Date().toISOString().lastIndexOf(":"));
+            if(!dashboardData.userLogIn){
+                document.getElementById(`dataDiv${record.id}`).innerHTML = `<label for="bookEmail${record.id}">Email</label>
+                            <input type="email" name="bookEmail" id="bookEmail${record.id}" required>`;
+            }
+        }
+    }
+    
+
+    function bookRoom(e, roomId, quantity){
+        e.preventDefault();
+        const formData = Object.fromEntries(new FormData(e.target));
+
+        if(formData.tillDate<=formData.fromDate){
+            swal("ERROR!", 'Till time should be greater than from time.', "error");
+        }else if(formData.bookQuantity > quantity){
+            swal("ERROR!", 'Please book valid quantity.', "error");
+        }else{
+            formData.roomId = roomId;
+            doAjaxCall('/book-room', formData, false, 'POST', (response, responseCode) => {
+                if(responseCode == 1){
+                    if(response.status){
+                        swal("SUCCESS!", response.message, "success");
+                        setTimeout(() => location.reload(), 1000);
+                    }else{
+                        swal("ERROR!", response.message, "error");
+                    }
+                }
+            });
+        }
+    }
+</script>

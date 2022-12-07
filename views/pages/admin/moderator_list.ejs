@@ -1,0 +1,42 @@
+<div class="bodyContent">
+	<h2>moderator list</h2>
+	<div class="theTable" id="theTable">
+		<div id="moderatorTableDiv">
+		
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        doAjaxCall('/admin/moderator-list', null, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+            	if(response.status){
+            		let tableAttributes = {
+            			class: 'moderatorTable',
+            			style: '',
+            		};
+
+            		let tableData = response.data.map((record, index) => {
+            			let recordObj = {};
+            			recordObj.src = index+1;
+            			recordObj.name = `${record.first_name} ${record.last_name}`;
+            			recordObj.email = record.email;
+            			recordObj['created at'] = new Date(record.createdAt).toLocaleString();
+            			recordObj.actions = `thisIsHtml<a href="/admin/edit-moderator?id=${record.id}" title="Edit"><i class="fa fa-pencil"></i></a>`;
+            			return recordObj;
+            		});
+
+            		let moderatorTable = createTable('moderatorTable', tableAttributes, tableData);
+            		document.getElementById('moderatorTableDiv').appendChild(moderatorTable);
+            	}else{
+            		commonToastr(response.message, response.status);
+            	}
+            }
+        });
+    });
+</script>

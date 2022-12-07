@@ -1,0 +1,71 @@
+<div class="body-div">
+	<div>
+		<h2>Booked Rooms</h2>
+	</div>
+
+	<div id="bookedRoomTableDiv" class="tableFront">
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        loadPage();
+    });
+
+    function loadPage(){
+    	doAjaxCall('/user-booked-rooms', null, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                	console.log('response is: ', response);
+            		let tableAttributes = {
+            			class: 'bookedRoomTable',
+            			style: '',
+            		};
+
+            		let tableData = response.roomBooked.map((record, index) => {
+            			let recordObj = {};
+            			recordObj.src = index+1;
+            			recordObj['room type'] = record.type_name;
+            			recordObj.quantity = record.quantity;
+            			recordObj.from = new Date(record.from_time).toLocaleString();
+            			recordObj.till = new Date(record.till_time).toLocaleString();
+            			recordObj['confirm status'] = record.is_confirmed?'Confirmed':'Un-Confimed';
+            			recordObj['is cancelled'] = record.is_cancelled?'Yes':'No';
+            			recordObj['cancel time'] = record.cancel_time?new Date(record.cancel_time).toLocaleString():'-';
+            			recordObj.actions = (record.is_confirmed==1 || record.is_cancelled == 1)?'-':`thisIsHtml<div class="actionButtons"><a href="#" onclick="cancelBooking(${record.id})"><i class="fa fa-times" title="Cancel"></i></a><span id="editBtn${record.id}"></span></div>`;
+            			return recordObj;
+            		});
+
+            		let bookedRoomTable = createTable('bookedRoomTable', tableAttributes, tableData);
+            		document.getElementById('bookedRoomTableDiv').innerHTML = '';
+            		document.getElementById('bookedRoomTableDiv').appendChild(bookedRoomTable);
+
+            		// setting the edit button
+            		for(let bookedRoom of response.roomBooked){
+            			let editBtn = document.getElementById(`editBtn${bookedRoom.id}`);
+	            		if(editBtn){
+	            			editBtn.innerHTML = `<a href="/edit-booking?id=${bookedRoom.id}"><i class="fa fa-pencil" title="Edit"></i></a>`;
+	            		}
+            		}
+                }else{
+                	swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+    }
+
+    function cancelBooking(bookingId){
+        doAjaxCall('/cancel-booking', {bookingId}, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                	swal("SUCCESS!", response.message, "success");
+                    loadPage();
+                }else{
+                	swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+    }
+</script>

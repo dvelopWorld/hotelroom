@@ -1,0 +1,63 @@
+<div class="filter-div">
+  <form class="filter-form" id="filter-form">
+    <div>
+      <label for="fromDate">
+        From Time
+      </label>
+      <input type="datetime-local" name="fromDate" id="fromDate" required>
+    </div>
+    <div>
+      <label for="tillDate">
+        Till Time
+      </label>
+      <input type="datetime-local" name="tillDate" id="tillDate" required>
+    </div>
+    <button class="submitBtn" type="submit">Get Rooms</button>
+  </form>
+</div>
+
+
+
+<script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("filter-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      getAvailableRooms(e.target);
+    });
+  });
+
+
+  function getAvailableRooms(form){
+    const formData = Object.fromEntries(new FormData(form));
+
+    formData.fromDate = formData.fromDate.replace('T', ' ');
+    formData.tillDate = formData.tillDate.replace('T', ' ');
+
+    if(formData.tillDate<formData.fromDate){
+      swal("ERROR!", 'Till time should be greater than from time.', "error");
+    }else{
+      getDefaultData(formData);
+    }
+  }
+
+  function getDefaultData(formData){
+    let filterKeys = {};
+    if(!formData){
+      // default from date and till date is today and tommorrow.
+      filterKeys.fromDate = getDateForSql(new Date());
+      filterKeys.tillDate = getDateForSql(new Date(Date.now()+1000*60*60*24));
+    }else{
+      filterKeys = formData
+    }
+
+    doAjaxCall('/get-room-data', filterKeys, false, 'PUT', (response, responseCode) => {
+      if(responseCode == 1){
+        if(response.status){
+          setDashboard(response.data);
+        }else{
+          swal("ERROR!", response.message, "error");
+        }
+      }
+    });
+  }
+</script>

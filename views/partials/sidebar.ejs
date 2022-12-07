@@ -1,0 +1,47 @@
+<div class="side-nav">
+  <ul>
+    <li>
+      <a href="/admin">Dashboard</a>
+    </li>
+
+    <div id="userAuth">
+      <li class="dropdown">
+        <a href="#">Users &nbsp;&nbsp;&nbsp;&#65088;</a>
+        <ul class="dropdown-content">
+          <li><a href="/admin/add-moderator">Add Moderator</a></li>
+          <li><a href="/admin/moderator-list">Moderators</a></li>
+          <li><a href="#">Customers</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="#">Room Types &nbsp;&nbsp;&nbsp;&#65088;</a>
+        <ul class="dropdown-content">
+          <li><a href="/admin/add-room-type">Add Room Type</a></li>
+          <li><a href="/admin/room-type-list">Room Type List</a></li>
+        </ul>
+      </li>
+
+      <li class="dropdown">
+        <a href="#">Rooms &nbsp;&nbsp;&nbsp;&#65088;</a>
+        <ul class="dropdown-content">
+          <li><a href="/admin/add-room">Add Room</a></li>
+          <li><a href="/admin/room-list">Room List</a></li>
+        </ul>
+      </li>
+    </div>
+
+    <li>
+      <a href="/admin/approve-book-request">Approve Booking Request</a>
+    </li>
+  </ul>
+</div>
+
+
+<script type="text/javascript">
+  const userType = document.cookie.split('; ').find((row) => row.startsWith('userType='))?.split('=')[1];
+  console.log('userType is: ', userType);
+  if(userType == 2){
+    document.getElementById('userAuth').style.display = 'none';
+  }
+</script>

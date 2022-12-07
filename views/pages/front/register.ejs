@@ -1,0 +1,65 @@
+<style type="text/css">
+	input {
+	  height: 1.5rem;
+	  margin: .5rem;
+	}
+</style>
+
+<div class="body-div">
+	<div>
+		<h2>Register</h2>
+	</div>
+
+	<div>
+		<form id="registerForm">
+			<div>
+				<label for="firstName"> First Name: &nbsp&nbsp&nbsp&nbsp</label>
+				<input type="text" name="firstName" id="firstName" required>
+			</div>
+
+			<div>
+				<label for="lastName">Last Name: &nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<input type="text" name="lastName" id="lastName" required>
+			</div>
+
+			<div>
+				<label for="userEmail">Email Address: </label>
+				<input type="email" name="userEmail" id="userEmail" required>
+			</div>
+
+			<div>
+				<label for="userPassword">Password: &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</label>
+				<input type="password" name="userPassword" id="userPassword" required>
+			</div>
+
+			<div>
+	            <button class="submitBtn" type="submit">Sign Me In</button>
+	        </div>
+		</form>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("registerForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            doRegister(e.target);
+        });
+    });
+
+    function doRegister(form){
+        const formData = Object.fromEntries(new FormData(form));
+        doAjaxCall('/register', formData, false, 'POST', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                	swal("SUCCESS!", response.message, "success");
+                    setTimeout(()=>{window.location.href = "/login"}, 1000);
+                }else{
+                	swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+    }
+</script>

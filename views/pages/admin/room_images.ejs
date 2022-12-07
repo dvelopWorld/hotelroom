@@ -1,0 +1,77 @@
+<div class="bodyContent">
+	<link rel="stylesheet" href="/vendor/dropzone/dist/dropzone.css" />
+    <script src="/vendor/dropzone/dist/dropzone.js"></script>
+	<h2>Room Images</h2>
+
+	<div class="dropzone-uploader">
+        <form action='/admin/upload-room-pic' class="dropzone" id="upload-room-pic" enctype="multipart/form-data">
+          	<input type="hidden" name="roomId" id="roomId" value="<%=id%>" />
+        </form>
+    </div>
+
+
+    <div class="imagePicsUpload">
+    	<%if(roomImageData.length>0){%>
+    		<%for(let image of roomImageData){%>
+				<img src="<%=image.file_path.slice(6)%>" alt="Room image" width="200" height="200">
+    			<i class="fa fa-trash" style="color: red;" title="delete" onclick="deleteImage(<%=image.id%>)"></i>
+    		<%}%>
+    	<%}%>
+    </div>
+</div>
+
+
+
+
+
+<script>
+	Dropzone.options.uploadRoomPic = {
+	    paramName: "file",
+	    maxFilesize: 2, // MB
+	    maxFiles: 10,
+	    createImageThumbnails: true,
+	    addRemoveLinks:true,
+
+	    accept: function(file, done) {
+	      let reader = new FileReader();
+	      reader.onload = (function(entry){
+	        let image = new Image();
+	        image.src = entry.target.result;
+	        image.onload = function(){
+	          height = this.height;
+	          width = this.width;
+	          console.log('height', height);
+	          console.log('width', width);
+	          /*if(height>500||width>500){
+	            done("Maximum file size is 500*500 !");
+	          }else*/ 
+	          if(!file.name.match(/\.(jpg|jpeg|png|gif)$/)){
+	            done('You can upload only image files');
+	          }else{done();}
+	        };
+	      });
+	      reader.readAsDataURL(file);
+	    },
+
+	    complete:function(file){
+	      	if(file){
+	          	if(file.accepted == true){
+	          		commonToastr('Images uploaded successfully', 1);
+	           	}
+	      	}
+	    }
+	};
+
+	function deleteImage(imageId){
+		if(confirm("Delete Image")){
+			doAjaxCall('/admin/delete-image', {imageId}, false, 'DELETE', (response, responseCode) => {
+	            if(responseCode == 1){
+	            	commonToastr(response.message, response.status);
+	            	if(response.status){
+	            		setTimeout(() => location.reload(), 1200);
+	            	}
+	            }
+	        });
+		}
+	}
+</script>

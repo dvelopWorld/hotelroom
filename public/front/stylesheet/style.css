@@ -1,0 +1,171 @@
+.body-div {
+	display: inline-block;
+	height: 41rem;
+	margin: 5rem;
+}
+
+.filter-form {
+	text-align: center;
+	padding: 9rem 1rem 6rem 1rem;
+	box-shadow: 2px 2px 4px #000000;
+}
+
+.filter-form div {
+	padding: 10px;
+}
+
+.filter-form label {
+	font-size: 1.5rem;
+}
+
+.filter-form input {
+	font-size: 1rem;
+	box-shadow: 2px 2px 4px #000000;
+}
+
+.filter-form button {
+	font-size: 1rem;
+	box-shadow: 2px 2px 4px #000000;
+}
+
+.room-box {
+	margin: 15px;
+	padding: 15px;
+}
+
+body {
+	margin: 0;
+}
+
+.header {
+	height: 5rem;
+	bottom: 0;
+	background-color: #5ba9b5;
+	color: #fff;
+}
+
+.footer {
+	height: 3.3rem;
+	bottom: 0;
+	background-color: #5ba9b5;
+	color: #fff;
+}
+
+.logBtnInOut {
+	cursor: pointer;
+	float: right;
+	padding: 0.5rem 1.5rem;
+	border: 1px solid lightblue;
+	margin: 0 1.5rem;
+}
+
+.submitBtn {
+  width: 65%;
+  height: 2rem;
+  background-color: #1584e6;
+  border: 1px solid #1584e6;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.dashWrapper {
+	width: 100%;
+	overflow: hidden;
+}
+
+.dashSidebar {
+	width: 20%;
+	float: left;
+	margin: 9rem 0 0 2rem;
+}
+
+.dashBody {
+	margin: 0 0 0 8rem;
+	width: 60%;
+}
+
+.bookRoomClass {
+	border: 1px solid grey;
+	padding: 5px;
+	margin: 5px;
+	text-align: center;
+	width: 60%;
+}
+
+.bookRoomClass div {
+	display: block;
+	padding: 5px;
+	margin: 5px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.bookBtn {
+	margin-bottom: 10px;
+}
+
+.roomDiv{
+	border: 1px solid black;
+	margin: 20px;
+	padding: 20px;
+	margin-bottom: 50px;
+}
+
+.frontLogo img {
+	width: 223px;
+	height: 70px;
+	margin: 5px 10px;
+}
+
+.headerDiv {
+	width: 100%;
+	overflow: hidden;
+}
+
+.logoDiv{
+	width: 20%;
+	float: left;
+}
+
+.logHeadInOut {
+	margin: 15px;
+	padding: 5px;
+}
+
+.tableFront {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.tableFront thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.tableFront th, .tableFront td {
+  padding: 12px 15px;
+}
+
+.tableFront tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.tableFront tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.tableFront tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.actionButtons a {
+  padding: 0 5px;
+}

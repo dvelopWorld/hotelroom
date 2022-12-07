@@ -1,0 +1,60 @@
+<div class="bodyContent">
+	<h2>Room Booking Requests</h2>
+	<div class="theTable" id="theTable">
+		<div id="approveTableDiv">
+		
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        populatePage();
+    });
+
+    function populatePage(){
+    	doAjaxCall('/admin/approve-book-request', null, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+            	if(response.status){
+            		let tableAttributes = {
+            			class: 'roomTable',
+            			style: '',
+            		};
+
+            		let tableData = response.data.map((record, index) => {
+            			let recordObj = {};
+            			recordObj.src = index+1;
+            			recordObj['from time'] = new Date(record.from_time).toLocaleString();;
+            			recordObj['till time'] = new Date(record.till_time).toLocaleString();;
+            			recordObj.quantity = record.quantity;
+            			recordObj['price per room'] = record.price_per_room;
+            			recordObj['room type'] = record.type_name;
+            			recordObj.actions = `thisIsHtml<div class="actionButtons"><a title="approve" href="#" onclick="approveBooking(${record.id}, '${record.user_email}', ${record.user_id})"><i class="fa fa-check"></i></a></div>`;
+            			return recordObj;
+            		});
+
+            		let roomTable = createTable('roomTable', tableAttributes, tableData);
+            		document.getElementById('approveTableDiv').innerHTML = '';
+            		document.getElementById('approveTableDiv').appendChild(roomTable);
+            	}else{
+            		commonToastr(response.message, response.status);
+            	}
+            }
+        });
+    }
+
+    function approveBooking(bookingId, userEmail, userId){
+    	doAjaxCall('/admin/approve-booking', {id: bookingId, userEmail, userId}, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+            	commonToastr(response.message, response.status);
+            	if(response.status){
+            		populatePage();
+            	}
+            }
+        });
+    }
+</script>

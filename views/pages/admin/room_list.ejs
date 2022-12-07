@@ -1,0 +1,62 @@
+<div class="bodyContent">
+	<h2>Room List</h2>
+	<div class="theTable" id="theTable">
+		<div id="roomTableDiv">
+		
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+    	initPage();
+    });
+
+    function initPage(){
+    	doAjaxCall('/admin/room-list', null, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+            	if(response.status){
+            		let tableAttributes = {
+            			class: 'roomTable',
+            			style: '',
+            		};
+
+            		let tableData = response.data.map((record, index) => {
+            			let recordObj = {};
+            			recordObj.src = index+1;
+            			recordObj['room type'] = record.room_type;
+            			recordObj.quantity = record.quantity;
+            			recordObj.price = record.price;
+            			recordObj.description = record.description;
+            			recordObj['created at'] = new Date(record.createdAt).toLocaleString();
+            			recordObj.actions = `thisIsHtml<div class="actionButtons"><a href="/admin/edit-room?id=${record.id}" title="Edit"><i class="fa fa-pencil"></i></a><a href="room-images?id=${record.id}" title="Check Images"><i class="fa fa-picture-o" aria-hidden="true"></i></a><a href="#?id=${record.id}" title="Delete"><i class="fa fa-trash" style="color: red" onclick="deleteRoom(${record.id})" aria-hidden="true"></i></a></div>`;
+            			return recordObj;
+            		});
+
+            		let roomTable = createTable('roomTable', tableAttributes, tableData);
+            		document.getElementById('roomTableDiv').innerHTML = '';
+            		document.getElementById('roomTableDiv').appendChild(roomTable);
+            	}else{
+            		commonToastr(response.message, response.status);
+            	}
+            }
+        });
+    }
+
+    function deleteRoom(roomId){
+    	if(confirm("Delete Room!")){
+			doAjaxCall('/admin/delete-room', {roomId}, false, 'DELETE', (response, responseCode) => {
+	            if(responseCode == 1){
+	            	commonToastr(response.message, response.status);
+	            	if(response.status){
+	            		initPage();
+	            	}
+	            }
+	        });
+		}
+    }
+</script>

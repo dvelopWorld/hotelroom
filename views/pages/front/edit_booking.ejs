@@ -1,0 +1,78 @@
+<style type="text/css">
+    input {
+        height: 1.5rem;
+        margin: .5rem;
+    }
+</style>
+
+<div class="body-div">
+    <div class="formDiv">
+        <form id="updateBookingForm">
+            <div>
+                <label for="fromDate"><strong>From Date &nbsp &nbsp&nbsp&nbsp</strong></label>
+                <input type="datetime-local" value="" id="fromDate" name="fromDate" required>
+            </div>
+
+            <div>
+                <label for="tillDate"><strong>Till Date &nbsp &nbsp&nbsp&nbsp</strong></label>
+                <input type="datetime-local" value="" id="tillDate" name="tillDate" required>
+            </div>
+
+            <input type="hidden" id="bookingId" name="bookingId" value="">
+
+            <div>
+                <button class="submitBtn" type="submit">Update</button>
+            </div>
+        </form>
+    </div>    
+</div>
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", () => {
+        let queryData = new URLSearchParams(window.location.search);
+        doAjaxCall('/edit-booking', {bookingId: queryData.get('id')}, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                    document.getElementById('fromDate').value = datetimeLocal(new Date(response.data.from_time).toString());
+
+                    document.getElementById('tillDate').value = datetimeLocal(new Date(response.data.till_time).toString());
+                    document.getElementById('bookingId').value = queryData.get('id');
+                }else{
+                    swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+
+        document.getElementById("updateBookingForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            editBooking(e.target);
+        });
+    });
+
+    function datetimeLocal(datetime){
+        const dt = new Date(datetime);
+        dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+        return dt.toISOString().slice(0, 16);
+    }
+
+    function editBooking(form){
+        const formData = Object.fromEntries(new FormData(form));
+
+        formData.fromDate = formData.fromDate.replace('T', ' ');
+        formData.tillDate = formData.tillDate.replace('T', ' ');
+        console.log('the formData si: ', formData);
+        doAjaxCall('/update-booking', formData, false, 'PUT', (response, responseCode) => {
+            if(responseCode == 1){
+                if(response.status){
+                    swal("SUCCESS!", response.message, "success");
+                    setTimeout(()=>{window.location.href = "/"}, 1000);
+                }else{
+                    swal("ERROR!", response.message, "error");
+                }
+            }
+        });
+    }
+</script>

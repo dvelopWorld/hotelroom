@@ -1,0 +1,37 @@
+<header class="header">
+	<div class="headerDiv">
+		<div class="logoDiv">
+			<a href="/" class="frontLogo"><img src="/images/theIcon.JPG" /></a>
+		</div>
+
+		<div id="logHeadInOut" class="logHeadInOut">
+		</div>
+	</div>
+</header>
+
+
+
+<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", () => {
+		let logBtnStr = '';
+		if(document.cookie){
+			logBtnStr = '<a onclick="userLogout()" class="logBtnInOut">Logout</a><a href="/user-booked-rooms" class="logBtnInOut">Booked Rooms</a>';
+		}else{
+			logBtnStr = '<a href="/register" class="logBtnInOut">Register</a><a href="/login" class="logBtnInOut">Login</a>';
+		}
+		document.getElementById('logHeadInOut').innerHTML = logBtnStr;
+    });
+
+  	function userLogout(){
+	    doAjaxCall('/logout', null, false, 'PUT', (response, responseCode) => {
+	        if(responseCode == 1){
+	            if(response.status){
+	            	swal("Done !!", response.message, "success")
+	                setTimeout(()=>{window.location.href = "/"}, 1200);
+	            }else{
+	            	swal("ERROR !!", response.message, "error")
+	            }
+	        }
+	    });
+	}
+</script>
